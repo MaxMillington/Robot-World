@@ -18,12 +18,31 @@ class RobotDirectoryApp < Sinatra::Base
   end
 
   get '/robots/:id' do |id|
-    @robots = RobotDirectory.find(id.to_i)
+    @robot = RobotDirectory.find(id.to_i)
     erb :show
   end
 
   post '/robots' do
     RobotDirectory.create(params[:robot])
     redirect '/robots'
+  end
+
+  get '/robots/:id/edit' do |id|
+    @robot = RobotDirectory.find(id.to_i)
+    erb :edit
+  end
+
+  put '/robots/:id' do |id|
+    RobotDirectory.update(id.to_i, params[:skill])
+    redirect "/robots/#{id}"
+  end
+
+  delete '/robots/:id' do |id|
+    RobotDirectory.delete(id.to_i)
+    redirect '/robots'
+  end
+
+  not_found do
+    erb :error
   end
 end
